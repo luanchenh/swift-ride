@@ -4,6 +4,7 @@ import { LogOut, Phone, ShieldCheck, UserRound } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { AuthenticatedScreen } from "@/components/rider/AuthenticatedScreen";
 import { BottomNavigation } from "@/components/rider/BottomNavigation";
+import { ChangePasswordDialog } from "@/components/auth/ChangePasswordDialog";
 
 export function AccountScreen() {
   const { user, logout } = useAuth();
@@ -34,7 +35,8 @@ export function AccountScreen() {
           </div>
         </section>
 
-        <section className="mt-3 bg-white p-5">
+        <section className="mt-3 space-y-3 bg-white p-5">
+          <ChangePasswordDialog />
           <button
             type="button"
             onClick={logout}

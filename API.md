@@ -4,18 +4,18 @@
 
 ## Tổng quan
 
-Trong `src` có **28 API nghiệp vụ**, được tính theo số action HTTP trong các controller:
+Trong `src` có **29 API nghiệp vụ**, được tính theo số action HTTP trong các controller:
 
 | Service | Số API | Đường dẫn truy cập |
 |---|---:|---|
-| Trip Service | 21 | Qua Gateway: `/ts/...` |
+| Trip Service | 22 | Qua Gateway: `/ts/...` |
 | Matching & Pricing Service | 3 | Qua Gateway: `/mp/...` |
 | Payment Service | 4 | Qua Gateway: `/pm/...` |
-| **Tổng** | **28** | |
+| **Tổng** | **29** | |
 
 Ngoài ra, API Gateway có `GET /` trả về `Hello World!` để kiểm tra Gateway đang chạy. Endpoint này không được tính là API nghiệp vụ.
 
-> Lưu ý: API đọc vị trí tài xế của Matching & Pricing Service hỗ trợ cả tiền tố `/driver` và `/drivers`. Vì vậy có **29 URL nghiệp vụ thực tế**, nhưng chỉ có **28 action API**. Các endpoint OpenAPI chỉ xuất hiện trong môi trường Development và không được tính.
+> Lưu ý: API đọc vị trí tài xế của Matching & Pricing Service hỗ trợ cả tiền tố `/driver` và `/drivers`. Vì vậy có **30 URL nghiệp vụ thực tế**, nhưng chỉ có **29 action API**. Các endpoint OpenAPI chỉ xuất hiện trong môi trường Development và không được tính.
 
 ## Quy ước
 
@@ -23,7 +23,7 @@ Ngoài ra, API Gateway có `GET /` trả về `Hello World!` để kiểm tra Ga
 - `JWT`: gửi access token qua header `Authorization: Bearer <token>`.
 - `{...}`: tham số động trên URL.
 
-## 1. Trip Service — 21 API
+## 1. Trip Service — 22 API
 
 Base URL qua Gateway: `http://localhost:8000/ts`
 
@@ -36,37 +36,38 @@ Base URL qua Gateway: `http://localhost:8000/ts`
 | 3 | `POST` | `/auth/register-driver` | JWT | Đăng ký hồ sơ tài xế cho tài khoản hiện tại. |
 | 4 | `POST` | `/auth/logout` | JWT | Thực hiện yêu cầu đăng xuất; hiện tại kiểm tra tài khoản và trả về `204`. |
 | 5 | `GET` | `/auth/about-me` | JWT | Lấy thông tin tài khoản và hồ sơ tài xế hiện tại. |
+| 6 | `PUT` | `/auth/change-password` | JWT | Đổi mật khẩu sau khi xác minh mật khẩu hiện tại. |
 
 ### Chuyến đi
 
 | # | Method | Endpoint | Quyền | Ý nghĩa |
 |---:|---|---|---|---|
-| 6 | `GET` | `/trips/history` | JWT | Lấy lịch sử chuyến đi của hành khách. |
-| 7 | `GET` | `/trips/active` | JWT | Lấy chuyến đang hoạt động của hành khách hoặc tài xế. |
-| 8 | `GET` | `/trips/{tripUuid}` | JWT | Lấy chi tiết một chuyến đi mà người dùng có quyền xem. |
-| 9 | `POST` | `/trips` | JWT | Tạo chuyến, tính quãng đường, thời gian, giá và tuyến đường. |
-| 10 | `POST` | `/trips/{tripUuid}/confirm` | JWT | Hành khách xác nhận chuyến và bắt đầu tìm tài xế. |
-| 11 | `POST` | `/trips/{tripUuid}/cancel` | JWT | Hành khách hủy chuyến đang chờ tài xế. |
-| 12 | `POST` | `/trips/{tripUuid}/driver-location` | JWT | Tài xế cập nhật vị trí trong chuyến được giao. |
+| 7 | `GET` | `/trips/history` | JWT | Lấy lịch sử chuyến đi của hành khách. |
+| 8 | `GET` | `/trips/active` | JWT | Lấy chuyến đang hoạt động của hành khách hoặc tài xế. |
+| 9 | `GET` | `/trips/{tripUuid}` | JWT | Lấy chi tiết một chuyến đi mà người dùng có quyền xem. |
+| 10 | `POST` | `/trips` | JWT | Tạo chuyến, tính quãng đường, thời gian, giá và tuyến đường. |
+| 11 | `POST` | `/trips/{tripUuid}/confirm` | JWT | Hành khách xác nhận chuyến và bắt đầu tìm tài xế. |
+| 12 | `POST` | `/trips/{tripUuid}/cancel` | JWT | Hành khách hủy chuyến đang chờ tài xế. |
+| 13 | `POST` | `/trips/{tripUuid}/driver-location` | JWT | Tài xế cập nhật vị trí trong chuyến được giao. |
 
 ### Tài xế
 
 | # | Method | Endpoint | Quyền | Ý nghĩa |
 |---:|---|---|---|---|
-| 13 | `PATCH` | `/driver/{driverUuid}/online` | JWT | Cập nhật trạng thái online/offline của chính tài xế. |
-| 14 | `POST` | `/driver/trip/{tripUuid}/accept` | JWT | Tài xế chấp nhận đề nghị chuyến đi. |
-| 15 | `POST` | `/driver/trip/{tripUuid}/reject` | JWT | Tài xế từ chối đề nghị và hệ thống tìm tài xế tiếp theo. |
-| 16 | `POST` | `/driver/trip/{tripUuid}/pickup` | JWT | Xác nhận đã đón hành khách. |
-| 17 | `POST` | `/driver/trip/{tripUuid}/dropoff` | JWT | Xác nhận trả khách và phát sự kiện tạo thanh toán. |
-| 18 | `GET` | `/drivers/notifications/stream` | JWT | Mở luồng SSE nhận đề nghị chuyến đi theo thời gian thực. |
-| 19 | `GET` | `/driver/history` | JWT | Lấy lịch sử các chuyến đã trả khách của tài xế hiện tại. |
+| 14 | `PATCH` | `/driver/{driverUuid}/online` | JWT | Cập nhật trạng thái online/offline của chính tài xế. |
+| 15 | `POST` | `/driver/trip/{tripUuid}/accept` | JWT | Tài xế chấp nhận đề nghị chuyến đi. |
+| 16 | `POST` | `/driver/trip/{tripUuid}/reject` | JWT | Tài xế từ chối đề nghị và hệ thống tìm tài xế tiếp theo. |
+| 17 | `POST` | `/driver/trip/{tripUuid}/pickup` | JWT | Xác nhận đã đón hành khách. |
+| 18 | `POST` | `/driver/trip/{tripUuid}/dropoff` | JWT | Xác nhận trả khách và phát sự kiện tạo thanh toán. |
+| 19 | `GET` | `/drivers/notifications/stream` | JWT | Mở luồng SSE nhận đề nghị chuyến đi theo thời gian thực. |
+| 20 | `GET` | `/driver/history` | JWT | Lấy lịch sử các chuyến đã trả khách của tài xế hiện tại. |
 
 ### Thanh toán
 
 | # | Method | Endpoint | Quyền | Ý nghĩa |
 |---:|---|---|---|---|
-| 20 | `GET` | `/payments` | JWT | Lấy danh sách hóa đơn của hành khách hiện tại từ Payment Service. |
-| 21 | `GET` | `/payments/driver` | JWT | Lấy danh sách hóa đơn và thu nhập của tài xế hiện tại. |
+| 21 | `GET` | `/payments` | JWT | Lấy danh sách hóa đơn của hành khách hiện tại từ Payment Service. |
+| 22 | `GET` | `/payments/driver` | JWT | Lấy danh sách hóa đơn và thu nhập của tài xế hiện tại. |
 
 ## 2. Matching & Pricing Service — 3 API
 

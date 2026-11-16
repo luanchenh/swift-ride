@@ -30,6 +30,11 @@ export type RegisterDriverContract = {
     licensePlate: string;
 }
 
+export type ChangePasswordContract = {
+    currentPassword: string;
+    newPassword: string;
+}
+
 // ! Todo later
 export type RegisterDriverView = Record<string, never>;
 

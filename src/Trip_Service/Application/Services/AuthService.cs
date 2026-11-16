@@ -120,6 +120,31 @@ public sealed class AuthService(
         return (account, profile);
     }
 
+    public async Task ChangePasswordAsync(
+        Guid accountUuid,
+        ChangePasswordRequestContract contract,
+        CancellationToken cancellationToken = default)
+    {
+        var account = await accountRepository.FindByUuidAsync(accountUuid, cancellationToken);
+        if (account is null)
+        {
+            throw new KeyNotFoundException("Không tìm thấy tài khoản.");
+        }
+
+        if (!passwordService.Verify(account, account.Password, contract.CurrentPassword))
+        {
+            throw new UnauthorizedAccessException("Mật khẩu hiện tại không đúng.");
+        }
+
+        if (contract.CurrentPassword == contract.NewPassword)
+        {
+            throw new ArgumentException("Mật khẩu mới phải khác mật khẩu hiện tại.");
+        }
+
+        var hashedPassword = passwordService.Hash(account, contract.NewPassword);
+        await accountRepository.UpdatePasswordAsync(accountUuid, hashedPassword, cancellationToken);
+    }
+
     public async Task LogoutAsync(Guid accountUuid, CancellationToken cancellationToken = default)
     {
         if (await accountRepository.FindByUuidAsync(accountUuid, cancellationToken) is null)

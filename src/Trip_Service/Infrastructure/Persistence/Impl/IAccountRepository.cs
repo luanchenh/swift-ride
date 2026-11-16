@@ -8,4 +8,5 @@ public interface IAccountRepository
     Task<Account?> FindByUuidAsync(Guid uuid, CancellationToken cancellationToken = default);
     Task<bool> PhoneExistsAsync(string phone, CancellationToken cancellationToken = default);
     Task AddAsync(Account account, CancellationToken cancellationToken = default);
+    Task UpdatePasswordAsync(Guid uuid, string hashedPassword, CancellationToken cancellationToken = default);
 }

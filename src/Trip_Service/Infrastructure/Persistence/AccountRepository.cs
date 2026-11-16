@@ -22,4 +22,21 @@ public sealed class AccountRepository(TripDBContext dbContext) : IAccountReposit
         dbContext.Accounts.Add(account);
         await dbContext.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task UpdatePasswordAsync(
+        Guid uuid,
+        string hashedPassword,
+        CancellationToken cancellationToken = default)
+    {
+        var updatedRows = await dbContext.Accounts
+            .Where(account => account.Uuid == uuid)
+            .ExecuteUpdateAsync(
+                setters => setters.SetProperty(account => account.Password, hashedPassword),
+                cancellationToken);
+
+        if (updatedRows == 0)
+        {
+            throw new KeyNotFoundException("Không tìm thấy tài khoản.");
+        }
+    }
 }

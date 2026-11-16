@@ -1,5 +1,5 @@
 import { httpClient } from "@/lib/http-client";
-import { AboutMeView, LoginContract, LoginView, RegisterContract, RegisterDriverContract, RegisterView } from "./contract/AuthContract";
+import { AboutMeView, ChangePasswordContract, LoginContract, LoginView, RegisterContract, RegisterDriverContract, RegisterView } from "./contract/AuthContract";
 
 class AuthService {
     async login(contract: LoginContract): Promise<LoginView> {
@@ -19,6 +19,10 @@ class AuthService {
     async getAboutMe(): Promise<AboutMeView> {
         const response = await httpClient.get<AboutMeView>("/ts/auth/about-me");
         return response.data;
+    }
+
+    async changePassword(contract: ChangePasswordContract): Promise<void> {
+        await httpClient.put("/ts/auth/change-password", contract);
     }
 }
 

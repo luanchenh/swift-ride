@@ -22,5 +22,10 @@ public interface IAuthService
         Guid accountUuid,
         CancellationToken cancellationToken = default);
 
+    Task ChangePasswordAsync(
+        Guid accountUuid,
+        ChangePasswordRequestContract contract,
+        CancellationToken cancellationToken = default);
+
     Task LogoutAsync(Guid accountUuid, CancellationToken cancellationToken = default);
 }

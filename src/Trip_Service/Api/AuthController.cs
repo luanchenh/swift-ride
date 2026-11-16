@@ -64,6 +64,16 @@ public sealed class AuthController(IAuthService authService) : ControllerBase
         return Ok(MapAboutMe(result.Account, result.Profile));
     }
 
+    [Authorize]
+    [HttpPut("change-password")]
+    public async Task<IActionResult> ChangePasswordAsync(
+        [FromBody] ChangePasswordRequestContract contract,
+        CancellationToken cancellationToken)
+    {
+        await authService.ChangePasswordAsync(GetAccountUuid(), contract, cancellationToken);
+        return NoContent();
+    }
+
     // Helper function
     private Guid GetAccountUuid()
     {

@@ -4,6 +4,7 @@ import { BadgeCheck, CarFront, CreditCard, LogOut, Phone, UserRound } from "luci
 import { useAuth } from "@/components/auth/AuthProvider";
 import { DriverBottomNavigation } from "@/components/driver/DriverBottomNavigation";
 import { DriverOnlyScreen } from "@/components/driver/DriverOnlyScreen";
+import { ChangePasswordDialog } from "@/components/auth/ChangePasswordDialog";
 
 export function DriverAccountScreen() {
   const { user, logout } = useAuth();
@@ -42,7 +43,8 @@ export function DriverAccountScreen() {
           </div>
         </section>
 
-        <section className="mt-3 bg-white p-5">
+        <section className="mt-3 space-y-3 bg-white p-5">
+          <ChangePasswordDialog />
           <button
             type="button"
             onClick={logout}
